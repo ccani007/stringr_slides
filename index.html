@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Stringr and Regular Expressions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Catalina Cañizares" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link rel="stylesheet" href="css/cssninja-scaffold.css" type="text/css" />
+    <link rel="stylesheet" href="css/ninjutsu.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Stringr and Regular Expressions
+]
+.subtitle[
+## PHC 6701 - Summer 2022
+]
+.author[
+### Catalina Cañizares
+]
+.date[
+### Jul 01, 2022
+]
+
+---
+
+
+
+
+
+
+
+
+# Overview
+
+## We will cover the following:
+
+
++ String manipulation.  
+
++ `str`_functions.    
+
++ Regular Expressions.  
+
+
+---
+
+# Prepare the following packages for this lecture:
+
+
+```r
+install.packages("learnr")
+library(learnr)
+library(palmerpenguins)
+library(tidyverse)
+```
+
+.pull-left[
+.center[![:scale 40%](images/tidyverse.png)]
+]
+
+.pull-right[
+.center[![:scale 40%](images/palmer_penguins.png)]
+]
+
+.center[![:scale 40%](images/learnr.png)]
+
+---
+
+# What are strings ?
+
+Words or characters. 
+
+.center[![:scale 50%](images/stringr_sticker.png)]
+
+
+```r
+string &lt;- c( "It is just english", "inside a vector")
+string
+```
+
+```
+[1] "It is just english" "inside a vector"   
+```
+
+---
+# Why should you care?
+
+Manipulating strings usually is part of the Wrangling process 
+
+
+.center[![:scale 80%](images/process.png)]
+
+
+---
+# `stringr` Package?
+
++ `stringr` version 1.4.0 has a total of 53 functions.  
+
+--
++ 41 of them start with `str_`
+
+
+```r
+stringr::str
+```
+.center[![:scale 50%](images/str_functions.png)]
+
+---
+# We are not covering all...
+
+.center[![:scale 80%](images/learning_curve.png)]
+
+--
+
+&lt;mark&gt;But we will cover the most often used functions&lt;/mark&gt;
+---
+
+# The functions 
+
+.center[![:scale 50%](images/str_notes.png)]
+
+```r
+str_legth() 
+str_c()
+str_sub()
+str_split()
+str_subset()
+str_extract()
+str_match()
+str_replace()
+str_replace_all()
+str_to_lower()
+str_to_upper()
+str_to_title()
+```
+
+---
+# Examples
+
+--
+
+&lt;mark&gt;**str_length()**&lt;/mark&gt;. 
+Counts the number of "code points", in a string
+
+```r
+names &lt;- c("Gabriel", "Anny", "Catalina")
+```
+
+```r
+str_length(names)
+```
+
+```
+[1] 7 4 8
+```
+
+--
+&lt;mark&gt;**str_c()**&lt;/mark&gt;. 
+Joins two or more vectors into a single character vector,
+
+```r
+sep_sentence &lt;-   c("Hi everyone", "I want this to be", "only one sentence", "HELP!")
+sep_sentence
+```
+
+```
+[1] "Hi everyone"       "I want this to be" "only one sentence"
+[4] "HELP!"            
+```
+
+```r
+one_sentence &lt;-  str_c(sep_sentence, collapse = ", ")
+one_sentence
+```
+
+```
+[1] "Hi everyone, I want this to be, only one sentence, HELP!"
+```
+
+---
+--
+&lt;mark&gt;**str_sub**&lt;/mark&gt;. 
+Extract substrings from a character vector, from = start, to = end
+
+```r
+sense &lt;- ("This makes no sense")
+str_sub(sense, 1,10)
+```
+
+```
+[1] "This makes"
+```
+
+```r
+str_sub(sense, 15)
+```
+
+```
+[1] "sense"
+```
+--
+&lt;mark&gt;**str_subset**()&lt;/mark&gt; Keep strings matching a pattern,
+
+```r
+more_sense &lt;- c("This makes no sense", "although", "I am", "understanding")
+str_subset(more_sense, "u")
+```
+
+```
+[1] "although"      "understanding"
+```
+
+```r
+str_subset(more_sense, "c")
+```
+
+```
+character(0)
+```
+
+---
+--
+&lt;mark&gt;**str_split()**&lt;/mark&gt;. 
+Split up a string into pieces
+
+```r
+surnames &lt;- c("Ferdus Tarana", "Rodriguez Christofer", "Salehe Said")
+surnames
+```
+
+```
+[1] "Ferdus Tarana"        "Rodriguez Christofer" "Salehe Said"         
+```
+
+```r
+str_split(surnames, pattern = "," , simplify = TRUE)
+```
+
+```
+     [,1]                  
+[1,] "Ferdus Tarana"       
+[2,] "Rodriguez Christofer"
+[3,] "Salehe Said"         
+```
+
+--
+&lt;mark&gt;**str_extract**()&lt;/mark&gt; Extract matching patterns from a string
+
+```r
+project2 &lt;- c("12L", "52M", "1B", "nonsense2", "12", "more 2 think")
+str_extract(project2, "\\d")
+```
+
+```
+[1] "1" "5" "1" "2" "1" "2"
+```
+
+```r
+str_extract(project2,  "\\d+")
+```
+
+```
+[1] "12" "52" "1"  "2"  "12" "2" 
+```
+---
+--
+&lt;mark&gt;str_replace()&lt;/mark&gt; Replace matched patterns in a string
+
+```r
+typos &lt;- c("kansas", "kansas", "kansas", "kansas", 
+           "k", "hansas", "k")
+
+str_replace(typos, pattern =  "kansas", replacement = "k")
+```
+
+```
+[1] "k"      "k"      "k"      "k"      "k"      "hansas" "k"     
+```
+
+
+---
+&lt;mark&gt;str_to_lower()&lt;/mark&gt;
+
+```r
+capital &lt;- c("MY OBJECT", "ONLY HAS", "CAPITAL LETTERS", "UNTIL", "...")
+
+lower_case &lt;- str_to_lower(capital)
+lower_case
+```
+
+```
+[1] "my object"       "only has"        "capital letters" "until"          
+[5] "..."            
+```
+--
+&lt;mark&gt;str_to_upper()&lt;/mark&gt;
+
+
+```r
+str_to_upper(lower_case)
+```
+
+```
+[1] "MY OBJECT"       "ONLY HAS"        "CAPITAL LETTERS" "UNTIL"          
+[5] "..."            
+```
+--
+&lt;mark&gt;str_to_title()&lt;/mark&gt;
+
+
+```r
+str_to_title(capital)
+```
+
+```
+[1] "My Object"       "Only Has"        "Capital Letters" "Until"          
+[5] "..."            
+```
+
+---
+class: segue
+
+Regular Expressions
+
+---
+# Rexexps
+.center[![:scale 100%](images/cat.png)]
+
+
+---
+# For real...Regexp
+
+Are a concise and flexible tool for describing patterns in strings.
+
+Examples:
+
+```r
+fast_food &lt;- c("hamburgers", "(hamburgers9", "1hot dog", "(fries12", "2sandwich", ".")
+```
+--
+
+```r
+str_extract(fast_food, "h")
+```
+
+```
+[1] "h" "h" "h" NA  "h" NA 
+```
+--
+
+```r
+str_extract(fast_food, "^h")
+```
+
+```
+[1] "h" NA  NA  NA  NA  NA 
+```
+--
+
+```r
+str_extract(fast_food, "h$")
+```
+
+```
+[1] NA  NA  NA  NA  "h" NA 
+```
+--
+
+```r
+str_extract(fast_food, "\\d+")
+```
+
+```
+[1] NA   "9"  "1"  "12" "2"  NA  
+```
+
+
+---
+# Types of Regular Expressions 😄😢 💢
+There are **three** basic types of regular expressions:
+
+--
+1. Regular expressions that stand for individual symbols and determine frequencies
+
+--
+2. Regular expressions that stand for classes of symbols
+
+--
+3. Regular expressions that stand for structural properties
+
+.center[![:scale 60%](images/cat2.png)]
+
+---
+# Escaping... 🚀  
+
+
+```r
+fast_food
+```
+
+```
+[1] "hamburgers"   "(hamburgers9" "1hot dog"     "(fries12"     "2sandwich"   
+[6] "."           
+```
+
+The last character in our string is `"."`  
+
+
+How do you match a literal `"."` or `"("`?
+
+--
+
+
+```r
+str_extract(fast_food, ".")
+```
+
+```
+[1] "h" "(" "1" "(" "2" "."
+```
+---
+
+# Escaping... 🚀  
+--
+
+```r
+str_extract(fast_food, "\\.")
+```
+
+```
+[1] NA  NA  NA  NA  NA  "."
+```
+--
+
+```r
+str_extract(fast_food, "\\(")
+```
+
+```
+[1] NA  "(" NA  "(" NA  NA 
+```
+--
+
+```r
+str_extract(fast_food, c("\\.|\\(" ))
+```
+
+```
+[1] NA  "(" NA  "(" NA  "."
+```
+--
+You need to use an “escape” to tell the regular expression you want to match it exactly
+not use its special behavior.
+
+To create the regular expression `"\."` you need the string `"\\."`
+
+---
+
+## Regular expressions that stand for individual symbols and determine frequencies.
+
+| RegEx Symbol/Sequence | Explanation                                           |
+| --------------------- | ----------------------------------------------------- |
+| \*                    | The preceding item will be matched zero or more times |
+| +                     | The preceding item will be matched one or more times  |
+|\.                     |The Wild card, takes the place of anything
+
+---
+## Regular expressions that stand for individual symbols and determine frequencies.
+&lt;mark&gt;Examples&lt;/mark&gt;
+--
+
+```r
+str_extract(fast_food, "ham.+")
+```
+
+```
+[1] "hamburgers"  "hamburgers9" NA            NA            NA           
+[6] NA           
+```
+--
+
+```r
+str_extract(fast_food, ".+")
+```
+
+```
+[1] "hamburgers"   "(hamburgers9" "1hot dog"     "(fries12"     "2sandwich"   
+[6] "."           
+```
+--
+
+```r
+str_replace(fast_food, "\\(", "")
+```
+
+```
+[1] "hamburgers"  "hamburgers9" "1hot dog"    "fries12"     "2sandwich"  
+[6] "."          
+```
+
+---
+## Regular expressions that stand for classes of symbols.
+| RegEx Symbol/Sequence | Explanation                                                       |
+| --------------------- | ----------------------------------------------------------------- |
+| \[ab\]                | lower case a and b                                                |
+| \[a-z\]               | all lower case characters from a to z                             |
+| \[AB\]                | upper case a and b                                                |
+| \[A-Z\]               | all upper case characters from A to Z                             |
+| \[12\]                | digits 1 and 2                                                    |
+| \[0-9\]               | digits: 0 1 2 3 4 5 6 7 8 9                                       |
+| \[:digit:\]           | digits: 0 1 2 3 4 5 6 7 8 9                                       |
+| \[:lower:\]           | lower case characters: a–z                                        |
+| \[:upper:\]           | upper case characters: A–Z                                        |
+
+---
+## Regular expressions that stand for classes of symbols.
+&lt;mark&gt;Examples&lt;/mark&gt;
+
+```r
+str_extract(fast_food, "[ab].+")
+```
+
+```
+[1] "amburgers"  "amburgers9" NA           NA           "andwich"   
+[6] NA          
+```
+--
+
+```r
+str_extract(fast_food, "[1-2].+")
+```
+
+```
+[1] NA          NA          "1hot dog"  "12"        "2sandwich" NA         
+```
+--
+
+```r
+str_extract(fast_food, "[:digit:]")
+```
+
+```
+[1] NA  "9" "1" "1" "2" NA 
+```
+
+---
+
+## Regular expressions that stand for structural properties.
+
+| RegEx Symbol/Sequence | Explanation                            |
+| --------------------- | -------------------------------------- |
+| \\\\w                 | Word characters: \[\[:alnum:\]\_\]     |
+| \\\\W                 | No word characters: \[^\[:alnum:\]\_\] |
+| \\\\s                 | Space characters: \[\[:blank:\]\]      |
+| \\\\S                 | No space characters: \[^\[:blank:\]\]  |
+| \\\\d                 | Digits: \[\[:digit:\]\]                |
+| \\\\D                 | No digits: \[^\[:digit:\]\]            |
+| ^                     | Beginning of a string                  |
+| $                     | End of a string                        |
+
+---
+
+## Regular expressions that stand for structural properties.
+&lt;mark&gt;Examples&lt;/mark&gt;
+
+
+```r
+str_extract(fast_food, "\\d")
+```
+
+```
+[1] NA  "9" "1" "1" "2" NA 
+```
+--
+
+```r
+str_extract(fast_food, "\\W")
+```
+
+```
+[1] NA  "(" " " "(" NA  "."
+```
+--
+
+```r
+str_extract(fast_food, "g$")
+```
+
+```
+[1] NA  NA  "g" NA  NA  NA 
+```
+
+---
+
+## Finally, let's clean that horrible fast_food string
+
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+*  tibble(fast_food)
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 1
+  fast_food   
+  &lt;chr&gt;       
+1 hamburgers  
+2 (hamburgers9
+3 1hot dog    
+4 (fries12    
+5 2sandwich   
+6 .           
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+*  rename(food = fast_food)
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 1
+  food        
+  &lt;chr&gt;       
+1 hamburgers  
+2 (hamburgers9
+3 1hot dog    
+4 (fries12    
+5 2sandwich   
+6 .           
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+   rename(food = fast_food) %&gt;%
+*  mutate(
+*    clean = str_remove_all(
+*      food, "[:digit:]")
+*   )
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 2
+  food         clean      
+  &lt;chr&gt;        &lt;chr&gt;      
+1 hamburgers   hamburgers 
+2 (hamburgers9 (hamburgers
+3 1hot dog     hot dog    
+4 (fries12     (fries     
+5 2sandwich    sandwich   
+6 .            .          
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+   rename(food = fast_food) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       food, "[:digit:]")
+    ) %&gt;%
+*  mutate(
+*    clean = str_remove_all(
+*      clean, "\\(")
+*   )
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 2
+  food         clean     
+  &lt;chr&gt;        &lt;chr&gt;     
+1 hamburgers   hamburgers
+2 (hamburgers9 hamburgers
+3 1hot dog     hot dog   
+4 (fries12     fries     
+5 2sandwich    sandwich  
+6 .            .         
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+   rename(food = fast_food) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       food, "[:digit:]")
+    ) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       clean, "\\(")
+    ) %&gt;%
+*  mutate(
+*    clean = str_replace(
+*      clean, "\\.", "Pizza")
+*    )
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 2
+  food         clean     
+  &lt;chr&gt;        &lt;chr&gt;     
+1 hamburgers   hamburgers
+2 (hamburgers9 hamburgers
+3 1hot dog     hot dog   
+4 (fries12     fries     
+5 2sandwich    sandwich  
+6 .            Pizza     
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+   rename(food = fast_food) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       food, "[:digit:]")
+    ) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       clean, "\\(")
+    ) %&gt;%
+   mutate(
+     clean = str_replace(
+       clean, "\\.", "Pizza")
+     ) %&gt;%
+*  mutate(
+*    clean = str_to_sentence(clean)
+*    )
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 2
+  food         clean     
+  &lt;chr&gt;        &lt;chr&gt;     
+1 hamburgers   Hamburgers
+2 (hamburgers9 Hamburgers
+3 1hot dog     Hot dog   
+4 (fries12     Fries     
+5 2sandwich    Sandwich  
+6 .            Pizza     
+```
+]
+
+---
+count: false
+ 
+
+.panel1-my_food-auto[
+
+```r
+   tibble(fast_food) %&gt;%
+   rename(food = fast_food) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       food, "[:digit:]")
+    ) %&gt;%
+   mutate(
+     clean = str_remove_all(
+       clean, "\\(")
+    ) %&gt;%
+   mutate(
+     clean = str_replace(
+       clean, "\\.", "Pizza")
+     ) %&gt;%
+   mutate(
+     clean = str_to_sentence(clean)
+     ) %&gt;%
+* select(Food = clean)
+```
+]
+ 
+.panel2-my_food-auto[
+
+```
+# A tibble: 6 × 1
+  Food      
+  &lt;chr&gt;     
+1 Hamburgers
+2 Hamburgers
+3 Hot dog   
+4 Fries     
+5 Sandwich  
+6 Pizza     
+```
+]
+
+&lt;style&gt;
+.panel1-my_food-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-my_food-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-my_food-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+---
+
+
+
+---
+## Let's go practice 😸
+
+1. Download the .rmd file sent to your email 
+2. install `learnr`
+3. hit run 
+
+
+---
+## Useful resources
+
+https://stringr.tidyverse.org/articles/regular-expressions.html
+https://stringr.tidyverse.org/
+https://ladal.edu.au/regex.html
+https://nuitrcs.github.io/r-tidyverse/html/stringr.html
+https://regexone.com/lesson/excluding_characters?
+
+---
+## [\\T^h*e \\ $E^n#d \\]
+.center[![:scale 100%](images/final.png)]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="css/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"seal": false,
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

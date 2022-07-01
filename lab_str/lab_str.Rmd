@@ -1,0 +1,136 @@
+---
+title: "Tutorial"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+library(palmerpenguins)
+library(tidyverse)
+
+data("penguins")
+```
+
+
+## Introduction to lab
+
+We are going to work with the data set *penguins_raw* from the
+`palmerpinguins` package. 
+
+Data set description: 
+*A tibble with 344 rows and 17 variables*
+
+
+| Variable Name     | Description                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| studyName         | Sampling expedition from which data were collected, generated, etc.                     |
+| Sample Number     | an integer denoting the continuous numbering sequence for each sample                   |
+| Species           | a character string denoting the penguin species                                         |
+| Region            | a character string denoting the region of Palmer LTER sampling grid                     |
+| Island            | a character string denoting the island near Palmer Station where samples were collected |
+| Stage             | a character string denoting reproductive stage at sampling                              |
+| Individual ID     | a character string denoting the unique ID for each individual in dataset                |
+| Clutch Completion | a character string denoting if the study nest observed with a full clutch, i.e., 2 eggs |
+| Date Egg          | a date denoting the date study nest observed with 1 egg (sampled)                       |
+| Culmen Length     | a number denoting the length of the dorsal ridge of a bird's bill (millimeters)         |
+| Culmen Depth      | a number denoting the depth of the dorsal ridge of a bird's bill (millimeters)          |
+| Flipper Length    | an integer denoting the length penguin flipper (millimeters)                            |
+| Body Mass         | an integer denoting the penguin body mass (grams)                                       |
+| Sex               | a character string denoting the sex of an animal                                        |
+| Delta 15 N        | a number denoting the measure of the ratio of stable isotopes 15N:14N                   |
+| Delta 13 C        | a number denoting the measure of the ratio of stable isotopes 13C:12C                   |
+| Comments          | a character string with text providing additional relevant information for data         |
+
+
+
+## Stringr
+
+### Excercise 1
+
+Create a vector that contains at least three different characters
+```{r create-vector, exercise=TRUE}
+
+```
+
+
+```{r create-vector-hint}
+my_string <- c()
+```
+
+```{r create-vector-solution}
+my_string <- c("my string", "has", "3 things!")
+```
+
+
+### Excercise 2
+
+What function would you use to answer the following question:
+
+*How many characters has the longest comment on the penguins_raw data set?*. 
+(Remember the data set is called `penguins_raw` and the variable is called
+`Comments`)
+
+```{r number-characters, exercise=TRUE}
+
+```
+```{r number-characters-hint}
+str_length()
+```
+
+```{r number-characters-solution}
+str_length(penguins_raw$Comments)
+```
+
+### Exercise with Code
+
+*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+
+Now write a function that adds any two numbers and then call it:
+
+```{r add-function, exercise=TRUE, exercise.lines = 5}
+add <- function() {
+  
+}
+```
+
+## Topic 2
+
+### Exercise with Hint
+
+*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+
+Modify the following code to limit the number of rows printed to 5:
+
+```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
+mtcars
+```
+
+```{r print-limit-solution}
+head(mtcars)
+```
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```
+
