@@ -161,6 +161,8 @@ one_sentence
 ```
 
 ---
+# Examples
+
 --
 <mark>**str_sub**</mark>. 
 Extract substrings from a character vector, from = start, to = end
@@ -180,6 +182,8 @@ str_subset(more_sense, "c")
 ```
 
 ---
+# Examples
+
 --
 <mark>**str_split()**</mark>. 
 Split up a string into pieces
@@ -198,6 +202,8 @@ str_extract(project2, "\\d")
 str_extract(project2,  "\\d+")
 ```
 ---
+# Examples
+
 --
 <mark>str_replace()</mark> Replace matched patterns in a string
 ```{r}
@@ -210,6 +216,9 @@ str_replace(typos, pattern =  "kansas", replacement = "k")
 
 
 ---
+# Examples
+
+--
 <mark>str_to_lower()</mark>
 ```{r}
 capital <- c("MY OBJECT", "ONLY HAS", "CAPITAL LETTERS", "UNTIL", "...")
