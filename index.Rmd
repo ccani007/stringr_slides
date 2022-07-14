@@ -456,10 +456,11 @@ str_extract(fast_food, "g$")
 ---
 ## Last valuable tip
 
-Separate()
-It is not a str function but it is mostly use to separate into columns or rows 
-strings. 
-It comes from the `tidyr` package (loaded with tidyverse)
+Separate()  
+
+It is not a str function but it is mostly used to separate strings into columns.
+It comes from the `tidyr` package (loaded with tidyverse)  
+
 Example: 
 ```{r echo=FALSE}
 us_currency<- data.frame(

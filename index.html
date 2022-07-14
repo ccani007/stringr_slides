@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Catalina Cañizares
 ]
 .date[
-### Jul 05, 2022
+### Jul 14, 2022
 ]
 
 ---
@@ -153,6 +153,7 @@ Counts the number of "code points", in a string
 ```r
 names &lt;- c("Gabriel", "Anny", "Catalina")
 ```
+
 
 ```r
 str_length(names)
@@ -393,7 +394,7 @@ str_extract(fast_food, "\\d+")
 
 
 ---
-# Types of Regular Expressions 😄🙍 🗯
+# Types of Regular Expressions 😄😿 😠
 There are **three** basic types of regular expressions:
 
 --
@@ -887,7 +888,178 @@ count: false
 
 
 ---
-## Let's go practice 🤡
+## Last valuable tip
+
+Separate()  
+
+It is not a str function but it is mostly used to separate strings into columns or rows.
+It comes from the `tidyr` package (loaded with tidyverse)  
+
+Example: 
+
+```
+     CountryCurrency ValuePer_1USd      Opinion
+1 Bolivar- Venezuela     33137.833          OMG
+2  Dollar- Australia         1.478           Ok
+3     Peso- Colombia      4534.000 J e s u s...
+```
+--
+
+```r
+us_currency %&gt;% 
+  separate(CountryCurrency, c("Currency", "Country"), sep = "-") 
+```
+
+```
+  Currency    Country ValuePer_1USd      Opinion
+1  Bolivar  Venezuela     33137.833          OMG
+2   Dollar  Australia         1.478           Ok
+3     Peso   Colombia      4534.000 J e s u s...
+```
+---
+## Let's remove that annoying space
+count: false
+ 
+
+.panel1-space-auto[
+
+```r
+*us_currency
+```
+]
+ 
+.panel2-space-auto[
+
+```
+     CountryCurrency ValuePer_1USd      Opinion
+1 Bolivar- Venezuela     33137.833          OMG
+2  Dollar- Australia         1.478           Ok
+3     Peso- Colombia      4534.000 J e s u s...
+```
+]
+
+---
+count: false
+ 
+
+.panel1-space-auto[
+
+```r
+ us_currency %&gt;%
+* separate(CountryCurrency,
+*          c("Currency", "Country"),
+*          sep = "-"
+* )
+```
+]
+ 
+.panel2-space-auto[
+
+```
+  Currency    Country ValuePer_1USd      Opinion
+1  Bolivar  Venezuela     33137.833          OMG
+2   Dollar  Australia         1.478           Ok
+3     Peso   Colombia      4534.000 J e s u s...
+```
+]
+
+---
+count: false
+ 
+
+.panel1-space-auto[
+
+```r
+ us_currency %&gt;%
+  separate(CountryCurrency,
+           c("Currency", "Country"),
+           sep = "-"
+  ) %&gt;%
+* mutate(
+*   Country = str_trim(
+*     Country,
+*     side = "left")
+* )
+```
+]
+ 
+.panel2-space-auto[
+
+```
+  Currency   Country ValuePer_1USd      Opinion
+1  Bolivar Venezuela     33137.833          OMG
+2   Dollar Australia         1.478           Ok
+3     Peso  Colombia      4534.000 J e s u s...
+```
+]
+
+---
+count: false
+ 
+
+.panel1-space-auto[
+
+```r
+ us_currency %&gt;%
+  separate(CountryCurrency,
+           c("Currency", "Country"),
+           sep = "-"
+  ) %&gt;%
+  mutate(
+    Country = str_trim(
+      Country,
+      side = "left")
+  ) %&gt;%
+* dplyr::filter(
+*   Country == "Colombia"
+* )
+```
+]
+ 
+.panel2-space-auto[
+
+```
+  Currency  Country ValuePer_1USd      Opinion
+1     Peso Colombia          4534 J e s u s...
+```
+]
+
+&lt;style&gt;
+.panel1-space-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-space-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-space-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+---
+
+
+
+---
+## Let's go practice 😢
 
 1. Download the .rmd file sent to your email 
 2. install `learnr`
