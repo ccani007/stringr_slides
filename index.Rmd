@@ -146,6 +146,7 @@ Counts the number of "code points", in a string
 ```{r}
 names <- c("Gabriel", "Anny", "Catalina")
 ```
+
 ```{r}
 str_length(names)
 ```
@@ -450,6 +451,50 @@ str_extract(fast_food, "g$")
      clean = str_to_sentence(clean)
      ) %>%
   select(Food = clean)
+```
+
+---
+## Last valuable tip
+
+Separate()
+It is not a str function but it is mostly use to separate into columns or rows 
+strings. 
+It comes from the `tidyr` package (loaded with tidyverse)
+Example: 
+```{r echo=FALSE}
+us_currency<- data.frame(
+                CountryCurrency = c('Bolivar- Venezuela','Dollar- Australia','Peso- Colombia'),
+                 ValuePer_1USd = c(33137.833, 1.478, 4534.00),
+                 Opinion=c('OMG', 'Ok', 'J e s u s...')) 
+us_currency
+```
+--
+```{r}
+us_currency %>% 
+  separate(CountryCurrency, c("Currency", "Country"), sep = "-") 
+ 
+```
+---
+## Let's remove that annoying space
+`r chunk_reveal("space")`
+
+
+---
+
+```{r space, include=FALSE, message=FALSE, warning=FALSE}
+ us_currency %>% 
+  separate(CountryCurrency, 
+           c("Currency", "Country"), 
+           sep = "-"
+  ) %>% 
+  mutate(
+    Country = str_trim(
+      Country,
+      side = "left")
+  ) %>% 
+  dplyr::filter(
+    Country == "Colombia"
+  )
 ```
 
 ---
